@@ -1,0 +1,17 @@
+{
+  "name": "bishop-in-action",
+  "version": "1.0.0",
+  "description": "bishop.js NodeSchool workshop",
+  "bin": "bishop-in-action.js",
+  "repository": {
+    "url": "git@github.com:afoninsky/bishop-in-action.git",
+    "type": "git"
+  },
+  "author": "Andrey <vkfont@gmail.com> Afoninsky",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "workshopper": "^2.7.0",
+    "workshopper-adventure": "^5.1.8",
+    "workshopper-exercise": "^2.7.0"
+  }
+}
