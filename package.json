@@ -2,7 +2,8 @@
   "name": "bishop-in-action",
   "version": "1.0.0",
   "description": "bishop.js NodeSchool workshop",
-  "bin": "bishop-in-action.js",
+  "bin": "index.js",
+  "main": "index.js",
   "repository": {
     "url": "git@github.com:afoninsky/bishop-in-action.git",
     "type": "git"

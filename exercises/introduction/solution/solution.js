@@ -1,12 +1,7 @@
-var Hapi = require('hapi');
-var path = require('path');
-
-var server = Hapi.createServer('localhost', Number(process.argv[2] || 8080));
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: {
-        file: path.join(__dirname, '/index.html')
-    }
-});
-server.start();
+const bishop = require('bishop')()
+bishop.add('role: math, cmd: sum', message => {
+  return {
+    result: message.left + message.right
+  }
+})
+module.exports = bishop
