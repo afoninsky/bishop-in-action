@@ -1,30 +1,46 @@
-let exercise = require('workshopper-exercise')()
+const Promise = require('bluebird')
+const path = require('path')
+const assert = require('assert')
+const chalk = require('chalk')
 const filecheck = require('workshopper-exercise/filecheck')
-const execute = require('workshopper-exercise/execute');
-const comparestdout = require('workshopper-exercise/comparestdout')
+const execute = require('workshopper-exercise/execute')
 
-// checks that the submission file actually exists
-exercise = filecheck(exercise);
+const exercise = execute(filecheck(require('workshopper-exercise')()))
 
-// execute the solution and submission in parallel with spawn()
-exercise = execute(exercise);
+let submission, solution
+let left, right
 
+function getSolutionPath() {
+  return path.join(exercise.dir, './solution/')
+}
 
-// set up the data file to be passed to the submission
 exercise.addSetup((mode, callback) => {
-  // verify, run
-  console.log(1, mode)
+  const submissionPath = [ process.cwd(), exercise.args[0] ].join('/')
+  submission = require(submissionPath)
+  solution = require(getSolutionPath() + 'solution.js')
+  left = Math.floor(Math.random() * 99) + 1
+  right = Math.floor(Math.random() * 99) + 1
   callback()
 })
 
-// add a processor for both run and verify calls, added *before*
-// the comparestdout processor so we can mess with the stdouts
-exercise.addProcessor(function (mode, callback) {
-  console.log(2, mode)
-  callback()
-});
+exercise.addProcessor((mode, callback) => {
+  const route = { role: 'math', cmd: 'sum' }
 
-// compare stdout of solution and submission
-exercise = comparestdout(exercise)
+  Promise.props({
+    submission: submission.act(route, { left, right }),
+    solution: solution.act(route, { left, right })
+  }).then(result => {
+    if (mode === 'run') {
+      return console.log(chalk.gray(`left = ${left}, right = ${right}, result = ${JSON.stringify(result.solution)}`))
+    }
+    assert.deepEqual(result.solution, result.submission,
+      `Expected result: ${JSON.stringify(result.solution)}, actual result: ${JSON.stringify(result.submission)}`)
+  })
+  .then(() => callback())
+  .catch(err => {
+    exercise.emit('fail', err)
+    callback(null, false)
+  })
+})
 
 module.exports = exercise
