@@ -31,11 +31,11 @@ exercise.addProcessor((mode, callback) => {
     solution: solution.act(route, { left, right })
   }).then(result => {
     if (mode === 'run') {
-      return console.log(chalk.gray(`left = ${left}, right = ${right}, result = ${JSON.stringify(result.solution)}`))
+      return console.log(chalk.gray(`${left} + ${right} = ${result.submission}`))
     }
     assert(result.submission, exercise.__('error.noreturn'))
     assert.deepEqual(result.solution, result.submission,
-      exercise.__('error.expected', JSON.stringify(result.solution), JSON.stringify(result.submission)))
+      exercise.__('error.expected', result.solution, result.submission))
     callback()
   }).catch(err => {
     exercise.emit('fail', chalk.gray(err.message))
