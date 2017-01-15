@@ -33,12 +33,12 @@ exercise.addProcessor((mode, callback) => {
     if (mode === 'run') {
       return console.log(chalk.gray(`left = ${left}, right = ${right}, result = ${JSON.stringify(result.solution)}`))
     }
+    assert(result.submission, exercise.__('error.noreturn'))
     assert.deepEqual(result.solution, result.submission,
-      `Expected result: ${JSON.stringify(result.solution)}, actual result: ${JSON.stringify(result.submission)}`)
-  })
-  .then(() => callback())
-  .catch(err => {
-    exercise.emit('fail', err)
+      exercise.__('error.expected', JSON.stringify(result.solution), JSON.stringify(result.submission)))
+    callback()
+  }).catch(err => {
+    exercise.emit('fail', chalk.gray(err.message))
     callback(null, false)
   })
 })
