@@ -1,7 +1,7 @@
 {
-  "name": "bishop-microservice",
+  "name": "bishop-in-action",
   "version": "1.0.0",
-  "description": "Learn how to create BishopJs microservice",
+  "description": "Learn how to create BishopJs microservices",
   "bin": "index.js",
   "repository": {
     "url": "git@github.com:afoninsky/bishop-in-action.git",

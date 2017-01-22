@@ -16,13 +16,12 @@ const pino = require('pino')({
   name: 'custom-logger',
   level: 'info'
 })
-const createBishop = require('bishop')
-const bishop = createBishop({}, pino)
-bishop.log.info('Information message from bushop')
+const bishop = require('bishop')({}, pino)
+bishop.log.info('Information message from bishop')
 ```
 
 # Задача
-Теперь вы знаете как подключить в bishop ваш логгер. Задачи не будет, напишите `bishop-microservice verify <любой файл>` чтобы перейти к следующему упражнению.
+Теперь вы знаете как подключить в bishop ваш логгер. Задачи не будет, напишите `bishop-in-action verify <любой файл>` чтобы перейти к следующему упражнению.
 
 # Ссылки
 * https://nodejs.org/api/console.html - стандартная бибиотека для логгирования в nodejs, не подходит для продакшна

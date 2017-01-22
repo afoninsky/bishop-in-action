@@ -32,9 +32,9 @@ module.exports = bishop
 
 Проверить результат выполнения можно командой:
 ```
-# bishop-microservice run program.js
+# bishop-in-action run program.js
 ```
 Отправить результат на проверку можно командой:
 ```
-# bishop-microservice verify program.js
+# bishop-in-action verify program.js
 ```
