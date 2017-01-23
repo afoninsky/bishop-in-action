@@ -1,11 +1,47 @@
-- true power of bishop
-- transport independece (not same process: messages between services in many ways, hidden from business logic)
-- can define many transports: find most suitable
-- example: http (routing expected, complete rest so no need in ext)
-- easily create your own (example: between process on one machine)
-- pretty
+Предположим, что мы хотим связать две копии bishop на разных компьютерах в одну сеть. Для этого мы можем использовать транспорт `http`. При этом, мы автоматически получим REST API-интерфейс к сервису, и им смогут пользоваться другие приложения.
 
-test via curl
+Создадим сервис на хосте `computer-first`:
+```javascript
+const service = require('bishop')()
+
+service.add('role: test, command: hello', () => { return 'Hello, world!' } )
+
+service.use('bishop-http', {
+  listenPort: 8080
+}).then(() => {
+  service.listen()
+})
+
+```
+Мы можем убедиться что сервис слушает на порту 8080 выполнив команду `curl -X POST http://computer-first:8080`.
+
+Теперь подключимся с помощью клиента с хоста `computer-second` и добавим ссылку на сервис:
+```javascript
+const client = require('bishop')()
+
+client.use('bishop-http', {
+  name: 'remote-computer',
+  address: ' http://computer-first:8080',
+}).then(() => {
+  client.add('role: test' , 'remote-computer')
+})
+
+```
+
+Готово. После этой операции, в нашем клиентском приложении все маршруты, содержащие `role: test`, будут перенаправляться на хост `computer-first`:
+```javascript
+client.act('role: test, command: some').then(console.log)
+// 'Hello, world!'
+```
 
 
-- create transport
+Возможность использовать транспортные плагины дает нам широкий простор для написания микросервисов. Мы можем выносить бизнес-логику на соседние процессы, машины или континенты. В любом из этих случаев вам не придется думать как доставить сообщение нужному сервису, библиотека сделает это за нас. Надо всего лишь создать соответствующие паттерны, и указать какой транспорт использовать для обращения к их сервисам. В одно приложение можно подключать сколько угодно транспортов, bishop найдет их и воспользуется наиболее подходящим.
+
+# Задача
+???
+
+# Ссылки
+* https://github.com/afoninsky/bishop-http - транспорт для взаимодействия сервисов через http-протокол
+<!---
+2do: create guide for transport creation
+-->
